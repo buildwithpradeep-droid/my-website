@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relink — Social Account Recovery</title>
+<meta name="description" content="We get you back into your hacked, banned, or locked-out social accounts. Instagram, Facebook, TikTok, YouTube, LinkedIn, WhatsApp Business.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<!-- ============================================================
+     CONFIG — edit this block to reskin/rebrand the whole site
+     ============================================================ -->
+<script>
+const CONFIG = {
+  brand: "Relink",
+  tagline: "Social account recovery, without the runaround.",
+  heroTitle: "Your account isn't gone.\nIt's just locked.",
+  heroSub: "We handle the appeals, the verification loops, and the platform back-channels — for hacked, banned, and locked-out accounts across Instagram, Facebook, TikTok, YouTube, LinkedIn, WhatsApp Business, and Amazon Seller Central.",
+  ctaPrimary: "Start a recovery case",
+  ctaSecondary: "Check if you qualify",
+  platforms: ["Instagram", "Facebook", "TikTok", "YouTube", "LinkedIn", "WhatsApp Business", "Amazon Seller Central"],
+  stats: [
+    { value: 1180, suffix: "+", label: "accounts recovered" },
+    { value: 3.4, suffix: " days", label: "avg. turnaround", decimals: 1 },
+    { value: 91, suffix: "%", label: "case success rate" }
+  ],
+  process: [
+    { n: "01", title: "Verify ownership", body: "Send us proof you're the real owner — ID, past posts, linked email or number. We build the evidence file the platform actually wants to see." },
+    { n: "02", title: "File the case", body: "We submit through the correct channel for your situation — hacked, disabled, impersonated, or 2FA-locked — not the generic help form that goes nowhere." },
+    { n: "03", title: "Work the appeal", body: "We track the ticket, respond to platform requests within hours, and escalate through back-channels when the queue stalls." },
+    { n: "04", title: "Hand it back", body: "Once access is restored, we help you re-secure it — passwords, 2FA, recovery contacts — so it doesn't happen twice." }
+  ],
+  cases: [
+    { title: "Hacked account", body: "Someone else has your password, email, or 2FA. We lock them back out and restore your access." },
+    { title: "Disabled or banned", body: "Flagged for a violation you don't think was fair, or don't understand. We build the appeal." },
+    { title: "Impersonation takeover", body: "A duplicate or hijacked page is using your name. We get the fake removed and the real one back." },
+    { title: "Locked out, no 2FA", body: "Lost your phone, lost the codes, lost the recovery email. We rebuild the ownership trail." },
+    { title: "Business Manager lockout", body: "Ad accounts and pages stuck behind a Business Manager you can't access anymore." },
+    { title: "Amazon seller suspension", body: "Account, ASIN, or listing suspended over policy, IP, or authenticity claims. We build the plan of action and file the appeal." },
+    { title: "Legacy account access", body: "Recovering access to an account on behalf of someone who can no longer manage it themselves." }
+  ],
+  pricing: [
+    { name: "Standard", price: "Let's talk", period: "priced after intake", features: ["Single account, single platform", "Evidence file prepared for you", "Email updates every 48 hrs", "Pay only if we take the case"] },
+    { name: "Priority", price: "Let's talk", period: "priced after intake", highlighted: true, features: ["Everything in Standard", "Same-day case filing", "Direct line to your case handler", "Post-recovery security lockdown"] },
+    { name: "Business", price: "Let's talk", period: "priced after intake", features: ["Multiple accounts / Business Manager", "Dedicated recovery lead", "Priority escalation queue", "Ongoing account monitoring"] }
+  ],
+  email: "pradeepmudavath3@gmail.com",
+  telegram: "https://t.me/bal3kecho",
+  instagram: "@prdeepxr"
+};
+</script>
+
+<style>
+  :root{
+    --bg: #0a1128;
+    --bg-alt: #0f1830;
+    --surface: #141d3a;
+    --surface-2: #1a2444;
+    --line: #2a3660;
+    --text: #e9edf4;
+    --muted: #7c8598;
+    --amber: #f5a623;
+    --teal: #2dd4bf;
+    --teal-dim: #1a3d3a;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Sora',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;}
+  ::selection{background:var(--teal); color:#04211d;}
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible{
+    outline:2px solid var(--teal);
+    outline-offset:3px;
+  }
+
+  .wrap{max-width:1180px; margin:0 auto; padding:0 28px;}
+
+  /* NAV */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 28px;
+    background:linear-gradient(180deg, rgba(10,17,40,.9), rgba(10,17,40,0));
+    backdrop-filter:blur(6px);
+  }
+  .logo{font-weight:700; font-size:19px; letter-spacing:.01em; display:flex; align-items:center; gap:9px;}
+  .logo-dot{width:9px; height:9px; border-radius:2px; background:var(--teal); display:inline-block; transform:rotate(45deg); box-shadow:0 0 12px var(--teal);}
+  .nav-links{display:flex; gap:32px; font-size:14px; color:var(--muted);}
+  .nav-links a:hover{color:var(--text);}
+  .nav-cta{
+    font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:500;
+    background:var(--teal); color:#04211d; padding:9px 18px; border-radius:3px;
+    text-decoration:none; white-space:nowrap;
+  }
+  @media (max-width:840px){ .nav-links{display:none;} }
+
+  /* HERO */
+  .hero{
+    position:relative; min-height:100svh; display:flex; align-items:center;
+    padding-top:90px;
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  #hero-canvas{
+    position:absolute; inset:0; width:100%; height:100%;
+    opacity:0; transition:opacity 1.4s ease;
+  }
+  #hero-canvas.ready{opacity:1;}
+  .hero-inner{position:relative; z-index:2; width:100%;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--teal); display:flex; align-items:center; gap:10px; margin-bottom:22px;
+  }
+  .eyebrow::before{content:""; width:22px; height:1px; background:var(--teal);}
+  h1{
+    font-size:clamp(38px, 6vw, 68px); line-height:1.04; font-weight:700; letter-spacing:-.02em;
+    margin:0 0 26px; white-space:pre-line; max-width:820px;
+  }
+  .hero-sub{
+    font-size:17px; line-height:1.65; color:var(--muted); max-width:560px; margin:0 0 36px;
+  }
+  .hero-ctas{display:flex; gap:16px; flex-wrap:wrap; margin-bottom:44px;}
+  .btn-primary{
+    background:var(--teal); color:#04211d; font-weight:600; font-size:15px;
+    padding:14px 26px; border-radius:3px; text-decoration:none; border:none; cursor:pointer;
+    box-shadow:0 1px 0 rgba(255,255,255,.4) inset, 0 10px 24px -10px rgba(45,212,191,.55), 0 2px 0 #1a8f83;
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 1px 0 rgba(255,255,255,.4) inset, 0 16px 30px -10px rgba(45,212,191,.6), 0 4px 0 #1a8f83;}
+  .btn-primary:active{transform:translateY(1px); box-shadow:0 1px 0 rgba(255,255,255,.3) inset, 0 6px 14px -8px rgba(45,212,191,.5), 0 0 0 #1a8f83;}
+  .btn-secondary{
+    background:transparent; color:var(--text); font-weight:500; font-size:15px;
+    padding:14px 26px; border-radius:3px; text-decoration:none; border:1px solid var(--line);
+    transition:border-color .15s ease;
+  }
+  .btn-secondary:hover{border-color:var(--muted);}
+  .hero-note{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--muted);
+  }
+
+  /* TRUST / PLATFORM STRIP */
+  .strip{
+    border-bottom:1px solid var(--line); background:var(--bg-alt);
+    padding:22px 0;
+  }
+  .strip-row{
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--muted);
+  }
+  .strip-label{color:var(--teal);}
+  .strip-tag{
+    border:1px solid var(--line); border-radius:20px; padding:5px 14px; color:var(--text);
+  }
+
+  /* SECTION generic */
+  section{padding:100px 0;}
+  .section-head{max-width:640px; margin-bottom:64px;}
+  .section-tag{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--amber); margin-bottom:16px; display:block;
+  }
+  h2{font-size:clamp(28px,4vw,40px); font-weight:700; letter-spacing:-.015em; margin:0 0 16px;}
+  .section-desc{color:var(--muted); font-size:16px; line-height:1.7;}
+
+  /* STATS */
+  .stats{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:18px;
+    perspective:1400px;
+  }
+  .stat{
+    background:linear-gradient(155deg, var(--surface-2), var(--surface));
+    padding:36px 28px; text-align:left; border-radius:8px; border:1px solid var(--line);
+    transform-style:preserve-3d; will-change:transform;
+    box-shadow:0 1px 0 rgba(255,255,255,.03) inset, 0 18px 40px -22px rgba(0,0,0,.7);
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .stat-value{font-size:clamp(30px,4vw,46px); font-weight:700; color:var(--teal); font-variant-numeric:tabular-nums; transform:translateZ(24px);}
+  .stat-label{font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--muted); margin-top:8px; transform:translateZ(16px);}
+  @media (max-width:700px){ .stats{grid-template-columns:1fr;} }
+
+  /* PROCESS */
+  .process-list{display:flex; flex-direction:column;}
+  .process-item{
+    display:grid; grid-template-columns:90px 1fr; gap:28px;
+    padding:32px 0; border-top:1px solid var(--line);
+  }
+  .process-item:last-child{border-bottom:1px solid var(--line);}
+  .process-n{font-family:'JetBrains Mono',monospace; font-size:15px; color:var(--amber); padding-top:3px;}
+  .process-title{font-size:20px; font-weight:600; margin:0 0 10px;}
+  .process-body{color:var(--muted); font-size:15px; line-height:1.7; max-width:560px;}
+  @media (max-width:600px){ .process-item{grid-template-columns:1fr; gap:8px;} }
+
+  /* CASES GRID */
+  .case-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; perspective:1400px;}
+  .case-card{
+    background:linear-gradient(155deg, var(--surface-2), var(--surface));
+    padding:30px 26px; min-height:170px; border-radius:8px; border:1px solid var(--line);
+    transform-style:preserve-3d; will-change:transform;
+    box-shadow:0 1px 0 rgba(255,255,255,.03) inset, 0 18px 40px -22px rgba(0,0,0,.7);
+    transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  }
+  .case-card h3{font-size:16.5px; margin:0 0 10px; font-weight:600; transform:translateZ(22px);}
+  .case-card p{color:var(--muted); font-size:14px; line-height:1.65; margin:0; transform:translateZ(14px);}
+  @media (max-width:900px){ .case-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:600px){ .case-grid{grid-template-columns:1fr;} }
+  .case-grid .case-card:last-child:nth-child(3n+1){ grid-column: 1 / -1; }
+
+  /* PRICING */
+  .pricing-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:20px; perspective:1400px;}
+  .price-card{
+    border:1px solid var(--line); border-radius:8px; padding:34px 28px; background:var(--surface);
+    display:flex; flex-direction:column;
+    transform-style:preserve-3d; will-change:transform;
+    box-shadow:0 1px 0 rgba(255,255,255,.03) inset, 0 24px 48px -24px rgba(0,0,0,.75);
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .price-card.highlight{border-color:var(--teal); background:linear-gradient(180deg, var(--teal-dim), var(--surface) 40%); position:relative;
+    box-shadow:0 1px 0 rgba(255,255,255,.05) inset, 0 28px 56px -22px rgba(45,212,191,.28);
+  }
+  .price-card.highlight::before{
+    content:"MOST CHOSEN"; font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.1em;
+    color:#04211d; background:var(--teal); padding:4px 10px; border-radius:20px;
+    position:absolute; top:-11px; left:28px; transform:translateZ(30px);
+  }
+  .price-name{font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:14px; transform:translateZ(18px);}
+  .price-value{font-size:36px; font-weight:700; margin-bottom:2px; transform:translateZ(28px);}
+  .price-period{font-size:13px; color:var(--muted); margin-bottom:26px; transform:translateZ(16px);}
+  .price-features{list-style:none; padding:0; margin:0 0 30px; flex:1; transform:translateZ(12px);}
+  .price-features li{
+    font-size:14px; color:var(--text); padding:10px 0; border-top:1px solid var(--line);
+    display:flex; gap:10px;
+  }
+  .price-features li:first-child{border-top:none;}
+  .price-features li::before{content:"—"; color:var(--teal); flex-shrink:0;}
+  .price-cta{
+    text-align:center; padding:12px; border-radius:3px; text-decoration:none; font-weight:600; font-size:14px;
+    border:1px solid var(--line); color:var(--text);
+  }
+  .price-card.highlight .price-cta{background:var(--teal); color:#04211d; border:none;}
+  @media (max-width:900px){ .pricing-grid{grid-template-columns:1fr; max-width:420px; margin:0 auto;} }
+
+  /* CONTACT */
+  .contact-wrap{
+    display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:start;
+  }
+  .contact-copy p{color:var(--muted); font-size:15.5px; line-height:1.75;}
+  .contact-line{
+    display:flex; align-items:center; gap:12px; font-family:'JetBrains Mono',monospace; font-size:14px;
+    padding:14px 0; border-top:1px solid var(--line);
+  }
+  .contact-line:last-child{border-bottom:1px solid var(--line);}
+  .contact-line span{color:var(--muted);}
+  .contact-line a{text-decoration:none;}
+  .contact-line a:hover{color:var(--teal);}
+  form{display:flex; flex-direction:column; gap:14px;}
+  label{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em;}
+  input, select, textarea{
+    background:var(--surface-2); border:1px solid var(--line); color:var(--text);
+    padding:12px 14px; border-radius:4px; font-family:'Sora',sans-serif; font-size:14.5px;
+  }
+  input:focus, select:focus, textarea:focus{border-color:var(--teal);}
+  textarea{resize:vertical; min-height:90px;}
+  .field{display:flex; flex-direction:column; gap:6px;}
+  .field-row{display:flex; gap:14px;}
+  .field-row .field{flex:1;}
+  @media (max-width:820px){ .contact-wrap{grid-template-columns:1fr;} .field-row{flex-direction:column;} }
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--line); padding:44px 0 60px;}
+  .footer-row{display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:24px;}
+  .footer-disclaimer{color:var(--muted); font-size:12.5px; line-height:1.7; max-width:520px;}
+  .footer-brand{font-weight:700; font-size:16px; margin-bottom:10px; display:flex; align-items:center; gap:8px;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo"><span class="logo-dot"></span><span id="nav-brand"></span></div>
+  <div class="nav-links">
+    <a href="#process">Process</a>
+    <a href="#cases">Case types</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <a class="nav-cta" href="#contact">Start recovery</a>
+</nav>
+
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="wrap hero-inner">
+    <span class="eyebrow">Account recovery, handled end-to-end</span>
+    <h1 id="hero-title"></h1>
+    <p class="hero-sub" id="hero-sub"></p>
+    <div class="hero-ctas">
+      <a class="btn-primary" href="#contact" id="cta-primary"></a>
+      <a class="btn-secondary" href="#process" id="cta-secondary"></a>
+    </div>
+    <div class="hero-note mono">NO_RECOVERY_NO_FEE · CASES_REVIEWED_WITHIN_4H</div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="wrap strip-row">
+    <span class="strip-label">SUPPORTED_PLATFORMS:</span>
+    <span id="platform-tags" style="display:contents;"></span>
+  </div>
+</div>
+
+<section id="stats-section">
+  <div class="wrap">
+    <div class="stats" id="stats-grid"></div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">The process</span>
+      <h2>Four steps, one case handler</h2>
+      <p class="section-desc">Every platform has a different appeal path. We know which one applies to your situation and follow it in order — no guessing, no dead-end forms.</p>
+    </div>
+    <div class="process-list" id="process-list"></div>
+  </div>
+</section>
+
+<section id="cases">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">What we take on</span>
+      <h2>If it's locked, banned, or hijacked — it's a case</h2>
+      <p class="section-desc">Six situations we recover from most often. If yours isn't listed, tell us — most account problems fall into one of these anyway.</p>
+    </div>
+    <div class="case-grid" id="case-grid"></div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">Pricing</span>
+      <h2>Every case is priced after we look at it</h2>
+      <p class="section-desc">We review your case for free and quote a flat fee based on the platform and situation. You pay only if we take it on — talk to us to get your number.</p>
+    </div>
+    <div class="pricing-grid" id="pricing-grid"></div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap contact-wrap">
+    <div class="contact-copy">
+      <span class="section-tag">Start a case</span>
+      <h2>Tell us what happened</h2>
+      <p>The more detail you give us now, the faster we can tell you whether this is recoverable and what it'll take. Most reviews come back within 4 hours.</p>
+      <div class="contact-line"><span>Email</span> <a id="contact-email" href="#"></a></div>
+      <div class="contact-line"><span>Telegram</span> <a id="contact-telegram" href="#" target="_blank" rel="noopener"></a></div>
+      <div class="contact-line"><span>Instagram</span> <a id="contact-instagram" href="#" target="_blank" rel="noopener"></a></div>
+      <div class="contact-line"><span>Response time</span> <span>&lt; 4 hours, 7 days a week</span></div>
+    </div>
+    <form id="case-form">
+      <div class="field-row">
+        <div class="field">
+          <label for="f-name">Name</label>
+          <input id="f-name" name="name" type="text" required>
+        </div>
+        <div class="field">
+          <label for="f-platform">Platform</label>
+          <select id="f-platform" name="platform">
+            <option>Instagram</option>
+            <option>Facebook</option>
+            <option>TikTok</option>
+            <option>YouTube</option>
+            <option>LinkedIn</option>
+            <option>WhatsApp Business</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-email">Email</label>
+        <input id="f-email" name="email" type="email" required>
+      </div>
+      <div class="field">
+        <label for="f-issue">What happened</label>
+        <textarea id="f-issue" name="issue" placeholder="Hacked, disabled, impersonated, locked out — and roughly when it started"></textarea>
+      </div>
+      <button type="submit" class="btn-primary" style="margin-top:6px;">Submit case</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-row">
+    <div>
+      <div class="footer-brand"><span class="logo-dot"></span><span id="footer-brand"></span></div>
+      <div class="mono" style="font-size:12.5px; color:var(--muted);">Account recovery casework, since day one.</div>
+    </div>
+    <p class="footer-disclaimer">
+      <span id="footer-brand-2"></span> is an independent recovery service and is not affiliated with, endorsed by, or operated by Meta, TikTok, Google, LinkedIn, or WhatsApp. We assist with the official appeal channels each platform provides.
+    </p>
+  </div>
+</footer>
+
+<script>
+// ---------- populate content from CONFIG ----------
+document.title = CONFIG.brand + " — Social Account Recovery";
+document.getElementById('nav-brand').textContent = CONFIG.brand;
+document.getElementById('hero-title').textContent = CONFIG.heroTitle;
+document.getElementById('hero-sub').textContent = CONFIG.heroSub;
+document.getElementById('cta-primary').textContent = CONFIG.ctaPrimary;
+document.getElementById('cta-secondary').textContent = CONFIG.ctaSecondary;
+document.getElementById('footer-brand').textContent = CONFIG.brand;
+document.getElementById('footer-brand-2').textContent = CONFIG.brand;
+const emailEl = document.getElementById('contact-email');
+emailEl.textContent = CONFIG.email;
+emailEl.href = `mailto:${CONFIG.email}`;
+
+const telegramEl = document.getElementById('contact-telegram');
+telegramEl.textContent = CONFIG.telegram.replace('https://t.me/', '@');
+telegramEl.href = CONFIG.telegram;
+
+const instagramEl = document.getElementById('contact-instagram');
+instagramEl.textContent = CONFIG.instagram;
+instagramEl.href = `https://instagram.com/${CONFIG.instagram.replace('@','')}`;
+
+document.getElementById('platform-tags').innerHTML = CONFIG.platforms
+  .map(p => `<span class="strip-tag">${p}</span>`).join('');
+
+document.getElementById('process-list').innerHTML = CONFIG.process.map(step => `
+  <div class="process-item">
+    <div class="process-n">${step.n}</div>
+    <div>
+      <div class="process-title">${step.title}</div>
+      <div class="process-body">${step.body}</div>
+    </div>
+  </div>
+`).join('');
+
+document.getElementById('case-grid').innerHTML = CONFIG.cases.map(c => `
+  <div class="case-card"><h3>${c.title}</h3><p>${c.body}</p></div>
+`).join('');
+
+document.getElementById('pricing-grid').innerHTML = CONFIG.pricing.map(p => `
+  <div class="price-card ${p.highlighted ? 'highlight' : ''}">
+    <div class="price-name">${p.name}</div>
+    <div class="price-value">${p.price}</div>
+    <div class="price-period">${p.period}</div>
+    <ul class="price-features">${p.features.map(f => `<li>${f}</li>`).join('')}</ul>
+    <a href="#contact" class="price-cta">Get started</a>
+  </div>
+`).join('');
+
+// ---------- stats counter ----------
+const statsGrid = document.getElementById('stats-grid');
+statsGrid.innerHTML = CONFIG.stats.map((s,i) => `
+  <div class="stat">
+    <div class="stat-value mono" data-target="${s.value}" data-decimals="${s.decimals||0}" data-suffix="${s.suffix}">0</div>
+    <div class="stat-label">${s.label}</div>
+  </div>
+`).join('');
+
+function animateStats(){
+  const els = statsGrid.querySelectorAll('.stat-value');
+  els.forEach(el => {
+    const target = parseFloat(el.dataset.target);
+    const decimals = parseInt(el.dataset.decimals);
+    const suffix = el.dataset.suffix;
+    const start = performance.now();
+    const dur = 1400;
+    function tick(now){
+      const p = Math.min(1, (now - start) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const val = target * eased;
+      el.textContent = val.toFixed(decimals) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+}
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting){ animateStats(); statsObserver.disconnect(); } });
+}, { threshold: 0.4 });
+statsObserver.observe(document.getElementById('stats-section'));
+
+// ---------- form (mailto handoff, no backend) ----------
+document.getElementById('case-form').addEventListener('submit', function(e){
+  e.preventDefault();
+  const name = document.getElementById('f-name').value;
+  const platform = document.getElementById('f-platform').value;
+  const email = document.getElementById('f-email').value;
+  const issue = document.getElementById('f-issue').value;
+  const subject = encodeURIComponent(`Recovery case: ${platform} — ${name}`);
+  const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nPlatform: ${platform}\n\nWhat happened:\n${issue}`);
+  window.location.href = `mailto:${CONFIG.email}?subject=${subject}&body=${body}`;
+});
+
+// ---------- 3D tilt effect on cards ----------
+(function(){
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) return;
+  const cards = document.querySelectorAll('.stat, .case-card, .price-card');
+  cards.forEach(card => {
+    let rect = null;
+    card.addEventListener('mouseenter', () => { rect = card.getBoundingClientRect(); });
+    card.addEventListener('mousemove', (e) => {
+      if (!rect) rect = card.getBoundingClientRect();
+      const px = (e.clientX - rect.left) / rect.width;   // 0..1
+      const py = (e.clientY - rect.top) / rect.height;   // 0..1
+      const rotateY = (px - 0.5) * 14;
+      const rotateX = (0.5 - py) * 14;
+      card.style.transform = `perspective(1400px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1400px) rotateX(0deg) rotateY(0deg) translateY(0)';
+      rect = null;
+    });
+  });
+})();
+
+// ============================================================
+// 3D HERO — shattered padlock assembling from fragments
+// Amber shard = the vulnerability (keyhole). Teal = restored.
+// ============================================================
+(function(){
+  const canvas = document.getElementById('hero-canvas');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight || 1, 0.1, 100);
+  camera.position.set(0, 0, 13);
+
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  function resize(){
+    const w = canvas.parentElement.clientWidth;
+    const h = canvas.parentElement.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const group = new THREE.Group();
+  scene.add(group);
+  group.position.x = 2.6;
+
+  // subtle ambient/point light for depth (using MeshStandardMaterial)
+  const amb = new THREE.AmbientLight(0x8899aa, 0.7);
+  scene.add(amb);
+  const pt = new THREE.PointLight(0x2dd4bf, 1.6, 40);
+  pt.position.set(6, 6, 10);
+  scene.add(pt);
+  const pt2 = new THREE.PointLight(0xf5a623, 0.8, 40);
+  pt2.position.set(-6, -3, 6);
+  scene.add(pt2);
+
+  // ---- build target points: padlock silhouette ----
+  const targets = [];
+
+  // shackle: half-torus arc (the U shape on top)
+  const shackleR = 2.0;
+  const shackleCount = 46;
+  for (let i = 0; i < shackleCount; i++){
+    const t = i / (shackleCount - 1);
+    const angle = Math.PI * (0.08 + t * 0.84); // arc from just past 0 to just before PI
+    const x = Math.cos(angle) * shackleR;
+    const y = Math.sin(angle) * shackleR + 1.1;
+    // two rails (front/back depth) for a tube-like look
+    targets.push({ x, y, z: 0.35, key: false });
+    targets.push({ x, y, z: -0.35, key: false });
+  }
+
+  // body: rounded rectangle outline, sampled on surface (grid of points on front/back faces + edges)
+  const bodyW = 3.6, bodyH = 2.6, bodyD = 0.9;
+  const bodyRows = 9, bodyCols = 12;
+  for (let r = 0; r <= bodyRows; r++){
+    for (let c = 0; c <= bodyCols; c++){
+      // only edges of the grid to keep it a "shell", plus sparse fill
+      const onEdge = (r === 0 || r === bodyRows || c === 0 || c === bodyCols);
+      if (!onEdge && Math.random() > 0.12) continue;
+      const x = (c / bodyCols - 0.5) * bodyW;
+      const y = (r / bodyRows - 0.5) * bodyH - 1.5;
+      const z = Math.random() > 0.5 ? bodyD/2 : -bodyD/2;
+      targets.push({ x, y, z, key: false });
+    }
+  }
+
+  // keyhole — small cluster, marked amber (the point of vulnerability)
+  const keyholeCount = 10;
+  for (let i = 0; i < keyholeCount; i++){
+    const angle = (i / keyholeCount) * Math.PI * 2;
+    targets.push({
+      x: Math.cos(angle) * 0.28,
+      y: Math.sin(angle) * 0.28 - 1.55,
+      z: 0.5,
+      key: true
+    });
+  }
+
+  const tealColor = new THREE.Color(0x2dd4bf);
+  const amberColor = new THREE.Color(0xf5a623);
+  const shardGeo = new THREE.OctahedronGeometry(0.085, 0);
+
+  const shards = targets.map(t => {
+    const mat = new THREE.MeshStandardMaterial({
+      color: t.key ? amberColor : tealColor,
+      emissive: t.key ? amberColor : tealColor,
+      emissiveIntensity: t.key ? 0.9 : 0.35,
+      roughness: 0.4,
+      metalness: 0.3,
+      transparent: true,
+      opacity: 0.95
+    });
+    const mesh = new THREE.Mesh(shardGeo, mat);
+    const spread = 9;
+    mesh.position.set(
+      (Math.random() - 0.5) * spread * 2,
+      (Math.random() - 0.5) * spread * 2,
+      (Math.random() - 0.5) * spread
+    );
+    mesh.userData.target = new THREE.Vector3(t.x, t.y, t.z);
+    mesh.userData.start = mesh.position.clone();
+    mesh.userData.rotSpeed = (Math.random() - 0.5) * 0.02;
+    group.add(mesh);
+    return mesh;
+  });
+
+  // faint connecting ring behind everything for atmosphere
+  const ringGeo = new THREE.TorusGeometry(4.6, 0.008, 8, 90);
+  const ringMat = new THREE.MeshBasicMaterial({ color: 0x2dd4bf, transparent: true, opacity: 0.15 });
+  const ring = new THREE.Mesh(ringGeo, ringMat);
+  ring.rotation.x = Math.PI / 2.3;
+  group.add(ring);
+
+  let progress = 0;
+  const assembleDuration = reduceMotion ? 1 : 2600;
+  let startTime = null;
+  let mouseX = 0, mouseY = 0;
+
+  window.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX / window.innerWidth - 0.5);
+    mouseY = (e.clientY / window.innerHeight - 0.5);
+  });
+
+  function easeOutCubic(x){ return 1 - Math.pow(1 - x, 3); }
+
+  function animate(now){
+    requestAnimationFrame(animate);
+    if (startTime === null) startTime = now;
+    const elapsed = now - startTime;
+    progress = Math.min(1, elapsed / assembleDuration);
+    const eased = easeOutCubic(progress);
+    const jitter = (1 - eased) * 0.6;
+
+    shards.forEach(mesh => {
+      const target = mesh.userData.target;
+      const start = mesh.userData.start;
+      mesh.position.x = start.x + (target.x - start.x) * eased + (Math.random()-0.5) * jitter * 0.02;
+      mesh.position.y = start.y + (target.y - start.y) * eased + (Math.random()-0.5) * jitter * 0.02;
+      mesh.position.z = start.z + (target.z - start.z) * eased + (Math.random()-0.5) * jitter * 0.02;
+      if (!reduceMotion){
+        mesh.rotation.x += mesh.userData.rotSpeed;
+        mesh.rotation.y += mesh.userData.rotSpeed;
+      }
+    });
+
+    if (!reduceMotion){
+      group.rotation.y += 0.0018;
+      group.rotation.y += (mouseX * 0.4 - group.rotation.y) * 0.02;
+      group.rotation.x += (mouseY * 0.2 - group.rotation.x) * 0.02;
+      ring.rotation.z += 0.0009;
+    }
+
+    renderer.render(scene, camera);
+  }
+
+  requestAnimationFrame(animate);
+  requestAnimationFrame(() => canvas.classList.add('ready'));
+})();
+</script>
+
+</body>
+</html>
